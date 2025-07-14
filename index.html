@@ -792,6 +792,60 @@
             }
         }
 
+        /* Success Message Styles */
+        .success-message {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 3000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .success-content {
+            background-color: var(--white);
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            margin: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            animation: slideInUp 0.4s ease;
+        }
+
+        .success-content i {
+            font-size: 4rem;
+            color: #28a745;
+            margin-bottom: 20px;
+        }
+
+        .success-content h3 {
+            color: var(--primary-purple);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .success-content p {
+            color: var(--text-dark);
+            line-height: 1.5;
+        }
+
+        @keyframes slideInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
         /* Animations */
         @keyframes fadeIn {
             from { opacity: 0; }
@@ -1113,7 +1167,7 @@
                         </div>
                         <div class="contact-text">
                             <h3>WhatsApp</h3>
-                            <a href="https://wa.me/1234567890">+1 234 567 890</a>
+                            <a href="https://wa.me/94787411299" target="_blank">+94 78 741 1299</a>
                         </div>
                     </div>
                     <div class="social-links">
@@ -1208,6 +1262,14 @@
     </div>
 
     <script>
+        // ========================================
+        // IMPORTANT: Update WhatsApp Numbers
+        // ========================================
+        // Replace '1234567890' with your actual WhatsApp number
+        // Format: Country code + phone number (no + symbol, no spaces)
+        // Example: For +1 555 123 4567, use: 15551234567
+        // ========================================
+
         // Mobile Menu Toggle
         const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
         const navLinks = document.querySelector('.nav-links');
@@ -1301,10 +1363,67 @@
         contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Here you would typically send the form data to a server
-            alert('Thank you for your message! We will contact you shortly.');
+            // Get form data
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const message = document.getElementById('message').value;
+            
+            // Your WhatsApp number (replace with your actual number)
+            const whatsappNumber = '94787411299'; // Your actual number
+            
+            // Create WhatsApp message
+            const whatsappMessage = `🏥 *New Contact Form Submission*
+            
+👤 *Name:* ${name}
+📧 *Email:* ${email}
+📞 *Phone:* ${phone}
+
+💬 *Message:*
+${message}
+
+---
+Sent via Loyal Care Website`;
+            
+            // Encode the message for URL
+            const encodedMessage = encodeURIComponent(whatsappMessage);
+            
+            // Create WhatsApp URL
+            const whatsappURL = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+            
+            // Open WhatsApp
+            window.open(whatsappURL, '_blank');
+            
+            // Show success message
+            showSuccessMessage();
+            
+            // Reset form
             contactForm.reset();
         });
+
+        // Success message function
+        function showSuccessMessage() {
+            // Create success message element
+            const successDiv = document.createElement('div');
+            successDiv.className = 'success-message';
+            successDiv.innerHTML = `
+                <div class="success-content">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>Message Sent Successfully!</h3>
+                    <p>Your message has been prepared for WhatsApp. You'll be redirected to WhatsApp to send it.</p>
+                </div>
+            `;
+            
+            // Add to body
+            document.body.appendChild(successDiv);
+            
+            // Remove after 5 seconds
+            setTimeout(() => {
+                if (successDiv.parentNode) {
+                    successDiv.parentNode.removeChild(successDiv);
+                }
+            }, 5000);
+        }
 
         // Service Modal Functionality
         const serviceData = {
